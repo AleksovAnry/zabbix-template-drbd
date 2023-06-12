@@ -29,6 +29,7 @@ INSTALLATION
 AUTHOR
 ------
 Original author: Stefano Buelow - stefano.buelow@gmail.com
+
 Adopt author: Aleksov Anry - aleksov@set-pro.net
 
 LICENSE
