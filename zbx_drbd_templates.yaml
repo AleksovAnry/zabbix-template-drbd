@@ -1,0 +1,173 @@
+zabbix_export:
+  version: '6.0'
+  date: '2023-06-12T13:56:06Z'
+  groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: 1084693c38b64ab385c4beaa3ceb5815
+      template: 'DRBD Resource monitoring'
+      name: 'DRBD Resource monitoring'
+      groups:
+        -
+          name: Templates
+      items:
+        -
+          uuid: a19a141b1eea4cd290b5a7d2d2702300
+          name: 'DRBD Version'
+          key: drbd.version
+          delay: '600'
+          history: 60d
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: DRBD
+      discovery_rules:
+        -
+          uuid: 404bf103a5b049648c5a64c4bbcbf4e3
+          name: 'DRBD Discovery'
+          key: drbd.discover
+          delay: '60'
+          filter:
+            conditions:
+              -
+                macro: '{#DRBDNAME}'
+                value: '.*'
+                formulaid: A
+          item_prototypes:
+            -
+              uuid: 4f50cf5ef1f54d0f8569a9d68aaef6b1
+              name: 'DRBD $1 Connection State'
+              key: 'drbd.cstate[{#DRBDNAME}]'
+              delay: '300'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+              trigger_prototypes:
+                -
+                  uuid: f0732213b0324356b72cd7f8132bc870
+                  expression: 'find(/Template DRBD/drbd.cstate[{#DRBDNAME}],,"like","Connected")<>1'
+                  name: 'DRBD {#DRBDNAME} Device is not Connected on {HOST.NAME}'
+                  priority: HIGH
+            -
+              uuid: ba09b9d09a664aac8ba0e61d2daed25c
+              name: 'DRBD $1 Device'
+              key: 'drbd.device[{#DRBDNAME}]'
+              delay: '300'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+            -
+              uuid: 933b181478fb44a68a7735223ac3153a
+              name: 'DRBD $1 Local Device State'
+              key: 'drbd.dstate_local[{#DRBDNAME}]'
+              delay: '300'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+              trigger_prototypes:
+                -
+                  uuid: 7f726ec0cefd4238aab562d630384502
+                  expression: 'find(/Template DRBD/drbd.dstate_local[{#DRBDNAME}],,"like","UpToDate")<>1'
+                  name: 'DRBD {#DRBDNAME} Local Device is not UpToDate on {HOST.NAME}'
+                  priority: AVERAGE
+            -
+              uuid: 72ced52a594e4a0aa65a755d42e6772b
+              name: 'DRBD $1 Remote Device State'
+              key: 'drbd.dstate_remote[{#DRBDNAME}]'
+              delay: '300'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+              trigger_prototypes:
+                -
+                  uuid: 972727f32043467ba0334ce739823a71
+                  expression: 'find(/Template DRBD/drbd.dstate_remote[{#DRBDNAME}],,"like","UpToDate")<>1'
+                  name: 'DRBD {#DRBDNAME} Remote Device is not UpToDate on {HOST.NAME}'
+                  priority: AVERAGE
+            -
+              uuid: 7048790cbc8b4d88969944199728b7d1
+              name: 'DRBD $1 Local IP'
+              key: 'drbd.ip[{#DRBDNAME}]'
+              delay: '600'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+            -
+              uuid: 32b5704370d040f6a1235537e541d375
+              name: 'DRBD $1 Local Device'
+              key: 'drbd.mdev[{#DRBDNAME}]'
+              delay: '600'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+            -
+              uuid: 956dddef26674728a55610b2bb5cf896
+              name: 'DRBD $1 Local Role'
+              key: 'drbd.role_local[{#DRBDNAME}]'
+              delay: '300'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+              trigger_prototypes:
+                -
+                  uuid: 729e0960d88642609551cbcd3156ec52
+                  expression: '(last(/Template DRBD/drbd.role_local[{#DRBDNAME}],#1)<>last(/Template DRBD/drbd.role_local[{#DRBDNAME}],#2))>0'
+                  name: 'DRBD {#DRBDNAME} Local Role has changed on {HOST.NAME}'
+                  priority: AVERAGE
+            -
+              uuid: e0f941e8c0c24f48b72558f06d1e13b1
+              name: 'DRBD $1 Remote Role'
+              key: 'drbd.role_remote[{#DRBDNAME}]'
+              delay: '300'
+              history: 30d
+              trends: '0'
+              value_type: TEXT
+              tags:
+                -
+                  tag: Application
+                  value: DRBD
+              trigger_prototypes:
+                -
+                  uuid: d499af933d7d445fbf674b38dd93a709
+                  expression: 'find(/Template DRBD/drbd.role_remote[{#DRBDNAME}],,"like","Unknown")=1'
+                  name: 'DRBD {#DRBDNAME} Remote Role is Unknown on {HOST.NAME}'
+                  priority: HIGH
+          trigger_prototypes:
+            -
+              uuid: 87273c717e48457ea114643820b67843
+              expression: 'find(/Template DRBD/drbd.role_local[{#DRBDNAME}],,"like","Secondary")=1 and find(/Template DRBD/drbd.role_remote[{#DRBDNAME}],,"like","Secondary")=1'
+              name: 'DRBD {#DRBDNAME} Local and Remote Roles are both Secondary'
+              priority: HIGH
